@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Caesar's Calendar</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="extension-wrapper">
+
+    <!-- Board -->
+    <div class="board-frame">
+      <!-- Label lives in the frame, not on the cork -->
+      <div class="frame-label">CAESAR'S CALENDAR</div>
+      <div class="board-inner">
+        <div class="grid">
+
+          <!-- Row 0: Months Jan–Jun, + 1 blocked corner -->
+          <div class="cell month" data-cell="JAN">JAN</div>
+          <div class="cell month" data-cell="FEB">FEB</div>
+          <div class="cell month" data-cell="MAR">MAR</div>
+          <div class="cell month" data-cell="APR">APR</div>
+          <div class="cell month" data-cell="MAY">MAY</div>
+          <div class="cell month" data-cell="JUN">JUN</div>
+          <div class="cell blocked"></div>
+
+          <!-- Row 1: Months Jul–Dec, + 1 blocked corner -->
+          <div class="cell month" data-cell="JUL">JUL</div>
+          <div class="cell month" data-cell="AUG">AUG</div>
+          <div class="cell month" data-cell="SEP">SEP</div>
+          <div class="cell month" data-cell="OCT">OCT</div>
+          <div class="cell month" data-cell="NOV">NOV</div>
+          <div class="cell month" data-cell="DEC">DEC</div>
+          <div class="cell blocked"></div>
+
+          <!-- Row 2: 1–7 -->
+          <div class="cell date" data-cell="1">1</div>
+          <div class="cell date" data-cell="2">2</div>
+          <div class="cell date" data-cell="3">3</div>
+          <div class="cell date" data-cell="4">4</div>
+          <div class="cell date" data-cell="5">5</div>
+          <div class="cell date" data-cell="6">6</div>
+          <div class="cell date" data-cell="7">7</div>
+
+          <!-- Row 3: 8–14 -->
+          <div class="cell date" data-cell="8">8</div>
+          <div class="cell date" data-cell="9">9</div>
+          <div class="cell date" data-cell="10">10</div>
+          <div class="cell date" data-cell="11">11</div>
+          <div class="cell date" data-cell="12">12</div>
+          <div class="cell date" data-cell="13">13</div>
+          <div class="cell date" data-cell="14">14</div>
+
+          <!-- Row 4: 15–21 -->
+          <div class="cell date" data-cell="15">15</div>
+          <div class="cell date" data-cell="16">16</div>
+          <div class="cell date" data-cell="17">17</div>
+          <div class="cell date" data-cell="18">18</div>
+          <div class="cell date" data-cell="19">19</div>
+          <div class="cell date" data-cell="20">20</div>
+          <div class="cell date" data-cell="21">21</div>
+
+          <!-- Row 5: 22–28 -->
+          <div class="cell date" data-cell="22">22</div>
+          <div class="cell date" data-cell="23">23</div>
+          <div class="cell date" data-cell="24">24</div>
+          <div class="cell date" data-cell="25">25</div>
+          <div class="cell date" data-cell="26">26</div>
+          <div class="cell date" data-cell="27">27</div>
+          <div class="cell date" data-cell="28">28</div>
+
+          <!-- Row 6: 29–31, Sun–Wed -->
+          <div class="cell date" data-cell="29">29</div>
+          <div class="cell date" data-cell="30">30</div>
+          <div class="cell date" data-cell="31">31</div>
+          <div class="cell day" data-cell="SUN">SUN</div>
+          <div class="cell day" data-cell="MON">MON</div>
+          <div class="cell day" data-cell="TUE">TUE</div>
+          <div class="cell day" data-cell="WED">WED</div>
+
+          <!-- Row 7: bottom-left notch (clipped) + Thu–Sat -->
+          <div class="cell blocked"></div>
+          <div class="cell blocked"></div>
+          <div class="cell blocked"></div>
+          <div class="cell blocked"></div>
+          <div class="cell day" data-cell="THU">THU</div>
+          <div class="cell day" data-cell="FRI">FRI</div>
+          <div class="cell day" data-cell="SAT">SAT</div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

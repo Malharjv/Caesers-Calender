@@ -1,0 +1,138 @@
+/* ─── Reset & Base ─────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 420px;
+  background: #5a3e1b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+/* ─── Outer wrapper ────────────────────────────────────────── */
+.extension-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ─── Board frame ──────────────────────────────────────────── */
+.board-frame {
+  width: 100%;
+  background: #d4aa70;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+/* ─── Frame label (CAESAR'S CALENDAR — lives in the frame) ── */
+.frame-label {
+  position: absolute;
+  /* aligns with the bottom-left notch cut from the cork board */
+  bottom: 18px;
+  left: 18px;
+  width: calc(0.58 * (100% - 36px));
+  height: calc(0.13 * (100% - 36px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  color: #2b1a06;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* ─── Inner board surface (cork/wood texture) ──────────────── */
+.board-inner {
+  background: #c8964a;
+  padding: 10px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+  aspect-ratio: 1 / 1;
+
+  /*
+   * Clip-path cuts two notches from the cork surface:
+   *  - Top-right: 1 col × 2 rows  (beside JUN/DEC)
+   *  - Bottom-left: 4 cols × 1 row (CAESAR'S CALENDAR area)
+   *
+   * Percentages derived from a 7-col × 8-row grid with 5px gaps
+   * inside a ~352px square board-inner.
+   */
+  clip-path: polygon(
+    0%   0%,
+    85%  0%,     /* top edge → stop before top-right notch    */
+    85%  27%,    /* drop down to bottom of top-right notch     */
+    100% 27%,    /* rejoin right edge below notch              */
+    100% 100%,   /* bottom-right corner                        */
+    58%  100%,   /* bottom edge → stop before bottom-left notch*/
+    58%  87%,    /* rise up to top of bottom-left notch        */
+    0%   87%,    /* rejoin left edge above notch               */
+    0%   0%
+  );
+}
+
+/* ─── The 7-column grid ────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Generic cell ─────────────────────────────────────────── */
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #2b1a06;
+  text-transform: uppercase;
+  user-select: none;
+  cursor: default;
+}
+
+/* ─── Month cells ──────────────────────────────────────────── */
+.cell.month {
+  font-size: 12px;
+}
+
+/* ─── Date number cells ────────────────────────────────────── */
+.cell.date {
+  font-size: 14px;
+}
+
+/* ─── Day-of-week cells ────────────────────────────────────── */
+.cell.day {
+  font-size: 11px;
+}
+
+/* ─── Blocked (empty corner) cells ────────────────────────── */
+.cell.blocked {
+  background: transparent;
+  cursor: default;
+}
+
+
+/* ─── Today target highlight ───────────────────────────────── */
+.cell.target {
+  color: #2b1a06;
+}

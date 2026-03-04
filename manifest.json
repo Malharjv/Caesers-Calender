@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Caesar's Calendar",
+  "version": "1.0",
+  "description": "A daily date puzzle game inspired by Caesar's Calendar.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Caesar's Calendar"
+  }
+}
