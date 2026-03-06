@@ -1,61 +1,68 @@
-// Caesar's Calendar — popup.js
-
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN',
                  'JUL','AUG','SEP','OCT','NOV','DEC'];
 const DAYS   = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 
-const CELL = 40;
-const GAP  = 5;
-const UNIT = CELL + GAP; // 45px — one board cell + its gap
+// Add new pieces here — 1 = filled cell, 0 = empty
+const SHAPES = {
+  u: [
+    [1, 0, 1],
+    [1, 1, 1]
+  ],
 
-function highlightToday() {
-  const now      = new Date();
-  const monthKey = MONTHS[now.getMonth()];
-  const dateKey  = String(now.getDate());
-  const dayKey   = DAYS[now.getDay()];
-  [monthKey, dateKey, dayKey].forEach(key => {
-    const el = document.querySelector(`[data-cell="${key}"]`);
-    if (el) el.classList.add('target');
+  l: [
+    [1, 1, 1],
+    [1, 0, 0]
+  ]
+};
+
+const BOARD_CELL = 40; // must match grid-template-columns/rows in popup.css
+const PIECE_CELL = 40; // adjust to resize pieces independently
+
+// Builds an SVG from a shape grid using PIECE_CELL sized squares
+function buildPieceSVG(shapeGrid) {
+  const rows = shapeGrid.length;
+  const cols = shapeGrid[0].length;
+  const W    = cols * PIECE_CELL;
+  const H    = rows * PIECE_CELL;
+
+  let rects = '';
+  shapeGrid.forEach((row, r) => {
+    row.forEach((filled, c) => {
+      if (!filled) return;
+      rects += `<rect x="${c * PIECE_CELL}" y="${r * PIECE_CELL}" width="${PIECE_CELL}" height="${PIECE_CELL}"/>`;
+    });
   });
+
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#b07830">${rects}</g>
+  </svg>`;
 }
 
-// ─── Snap helpers ─────────────────────────────────────────────
-
-// Returns the grid's top-left corner in wrapper-relative px.
-function getGridOrigin() {
+function snapToGrid(left, top) {
   const grid    = document.querySelector('.grid');
   const wrapper = document.querySelector('.extension-wrapper');
   const gr = grid.getBoundingClientRect();
   const wr = wrapper.getBoundingClientRect();
-  return { x: gr.left - wr.left, y: gr.top - wr.top };
-}
 
-// Snaps a wrapper-relative (left, top) to the nearest grid cell.
-function snapToGrid(left, top) {
-  const o   = getGridOrigin();
-  const col = Math.round((left - o.x) / UNIT);
-  const row = Math.round((top  - o.y) / UNIT);
+  const ox = Math.round(gr.left - wr.left);
+  const oy = Math.round(gr.top  - wr.top);
+
+  const col = Math.round((left - ox) / BOARD_CELL);
+  const row = Math.round((top  - oy) / BOARD_CELL);
+
   return {
-    left: o.x + col * UNIT,
-    top:  o.y + row * UNIT
+    left: ox + col * BOARD_CELL,
+    top:  oy + row * BOARD_CELL
   };
 }
 
-// ─── Piece interaction ────────────────────────────────────────
-//
-//  • Click-and-hold then drag  → moves the piece
-//  • Single tap (click)        → rotates 90° clockwise
-//  • Double tap (double-click) → flips horizontally
-//
 function initPiece(el) {
-  let rotation      = 0;     // 0 | 90 | 180 | 270
+  let rotation      = 0;
   let flipped       = false;
   let hasMoved      = false;
   let pendingClicks = 0;
   let clickTimer    = null;
 
-  // On first interaction, convert CSS-class-based position to inline
-  // so we can freely update left/top during drags.
   function ensureInlinePosition() {
     if (el.style.left) return;
     const wrapper = el.closest('.extension-wrapper');
@@ -70,15 +77,8 @@ function initPiece(el) {
     el.style.transform = `rotate(${rotation}deg)${f}`;
   }
 
-  function rotate() {
-    rotation = (rotation + 90) % 360;
-    applyTransform();
-  }
-
-  function flip() {
-    flipped = !flipped;
-    applyTransform();
-  }
+  function rotate() { rotation = (rotation + 90) % 360; applyTransform(); } // single click — +90°
+  function flip()   { flipped  = !flipped;               applyTransform(); } // double click — mirror
 
   el.addEventListener('mousedown', (e) => {
     e.preventDefault();
@@ -90,20 +90,17 @@ function initPiece(el) {
     const startLeft   = parseFloat(el.style.left) || 0;
     const startTop    = parseFloat(el.style.top)  || 0;
 
-    // Lift piece above everything while dragging
     el.style.zIndex     = '1000';
     el.style.transition = 'none';
 
     function onMove(e) {
       const dx = e.clientX - startMouseX;
       const dy = e.clientY - startMouseY;
-
       if (!hasMoved && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
         hasMoved = true;
         if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
         pendingClicks = 0;
       }
-
       if (hasMoved) {
         el.style.left = (startLeft + dx) + 'px';
         el.style.top  = (startTop  + dy) + 'px';
@@ -116,21 +113,16 @@ function initPiece(el) {
       el.style.zIndex = '';
 
       if (hasMoved) {
-        // Snap to nearest board cell with a quick ease animation
         el.style.transition = 'left 0.12s ease, top 0.12s ease';
-        const snapped = snapToGrid(
-          parseFloat(el.style.left),
-          parseFloat(el.style.top)
-        );
+        const snapped = snapToGrid(parseFloat(el.style.left), parseFloat(el.style.top));
         el.style.left = snapped.left + 'px';
         el.style.top  = snapped.top  + 'px';
       } else {
-        // Tap — count clicks, fire after 250 ms silence
         pendingClicks++;
         if (clickTimer) clearTimeout(clickTimer);
         clickTimer = setTimeout(() => {
-          if (pendingClicks === 1) rotate();      // single tap → rotate
-          else if (pendingClicks >= 2) flip();    // double tap → flip
+          if (pendingClicks === 1) rotate();
+          else if (pendingClicks >= 2) flip();
           pendingClicks = 0;
           clickTimer = null;
         }, 250);
@@ -142,8 +134,22 @@ function initPiece(el) {
   });
 }
 
-// ─── Init ─────────────────────────────────────────────────────
+function highlightToday() {
+  const now      = new Date();
+  const monthKey = MONTHS[now.getMonth()];
+  const dateKey  = String(now.getDate());
+  const dayKey   = DAYS[now.getDay()];
+  [monthKey, dateKey, dayKey].forEach(key => {
+    const el = document.querySelector(`[data-cell="${key}"]`);
+    if (el) el.classList.add('target');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   highlightToday();
-  document.querySelectorAll('.piece').forEach(initPiece);
+  document.querySelectorAll('.piece[data-shape]').forEach(el => {
+    const shape = SHAPES[el.dataset.shape];
+    if (shape) el.innerHTML = buildPieceSVG(shape);
+    initPiece(el);
+  });
 });
