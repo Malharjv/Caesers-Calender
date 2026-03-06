@@ -17,12 +17,58 @@ body {
 
 
 .extension-wrapper {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
 }
+
+/* Pieces  */
+.piece {
+  position: absolute;
+  cursor: grab;
+  user-select: none;
+}
+
+.piece:active {
+  cursor: grabbing;
+}
+
+/*
+ * Each piece is a single solid shape.
+ * Cell size = 40px, gap = 5px → one cell unit = 45px.
+ * clip-path carves the correct outline from the bounding rect.
+ */
+.piece-shape {
+  background: #b07830;
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.45),
+    inset 0 1px 3px rgba(255,255,255,0.18);
+}
+
+/* ── U-piece  ■ · ■ / ■ ■ ■
+ * Bounding box: 3 cols × 2 rows = 130px × 85px
+ * Notch (top-middle, 1×1 cell): x=45–85, y=0–45
+ */
+.u-shape {
+  width: 130px;
+  height: 85px;
+  clip-path: polygon(
+    0px   0px,
+    45px  0px,
+    45px  45px,
+    85px  45px,
+    85px  0px,
+    130px 0px,
+    130px 85px,
+    0px   85px
+  );
+}
+
+/* ─── Individual piece positions ──────────────────────────── */
+#piece-u   { top: 25px; left: 25px; }
 
 /* Board frame */
 
@@ -35,6 +81,7 @@ body {
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
   position: relative;
   flex-shrink: 0;
+  margin-bottom: 44px;
 }
 
 
