@@ -5,8 +5,8 @@
 }
 
 body {
-  width: 650px;
-  height: 650px;
+  width: 700px;
+  height: 700px;
   background: #5a3e1b;
   display: flex;
   justify-content: center;
@@ -27,6 +27,7 @@ body {
   position: absolute;
   cursor: grab;
   user-select: none;
+  z-index: 10;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.45));
 }
 
@@ -35,7 +36,17 @@ body {
   filter: drop-shadow(0 6px 14px rgba(0,0,0,0.55));
 }
 
-#piece-u { top: 25px; left: 25px; }
+
+#piece-u          { top:  30px; left: 25px; }
+#piece-l          { top: 140px; left: 25px; }
+#piece-five-block { top: 250px; left: 25px; }
+#piece-t-block    { top: 360px; left: 25px; }
+
+
+#piece-big-l      { top:  30px; left: 520px; }
+#piece-line       { top: 150px; left: 520px; }
+#piece-s-block    { top: 240px; left: 520px; }
+#piece-right-angle-block { top: 390px; left: 520px; }
 
 .board-frame {
   width: 316px;

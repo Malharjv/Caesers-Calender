@@ -17,7 +17,33 @@ const SHAPES = {
   big_l: [
     [1, 0, 0, 0],
     [1, 1, 1, 1]
-  ]
+  ],
+
+  line: [
+    [1, 1, 1, 1]
+  ],
+
+  five_block: [
+    [1, 1, 1],
+    [1, 1, 0],
+  ],
+
+  s_block: [
+    [0, 1, 1],
+    [0, 1, 0],
+    [1, 1, 0],
+  ],
+  t_block: [
+    [1, 1, 1],
+    [0, 1, 0],
+    [0, 1, 0],
+  ],
+  right_angle_block: [
+    [1, 0, 0],
+    [1, 0, 0],
+    [1, 1, 1],
+  ],
+
 };
 
 const BOARD_CELL = 40; // must match grid-template-columns/rows in popup.css
