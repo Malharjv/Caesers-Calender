@@ -48,6 +48,10 @@ body {
 #piece-s-block    { top: 240px; left: 520px; }
 #piece-right-angle-block { top: 390px; left: 520px; }
 
+
+#piece-z-block       { top: 520px; left: 190px; }
+#piece-long-z-block  { top: 520px; left: 320px; }
+
 .board-frame {
   width: 316px;
   height: 356px;

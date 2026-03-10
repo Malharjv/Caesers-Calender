@@ -44,6 +44,16 @@ const SHAPES = {
     [1, 1, 1],
   ],
 
+  z_block: [
+    [1, 1, 0],
+    [0, 1, 1],
+  ],
+
+  long_z_block: [
+    [1, 1, 1, 0],
+    [0, 0, 1, 1],
+  ],
+
 };
 
 const BOARD_CELL = 40; // must match grid-template-columns/rows in popup.css
